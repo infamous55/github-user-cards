@@ -65,7 +65,7 @@ export default function Home() {
             Get Started
           </button>
           <a
-            className="px-4 py-2 min-w-[9rem] font-semibold rounded-md shadow-sm border-2 border-gray-200 focus-visible:outline-none focus-visible:border-gray-600"
+            className="px-4 py-2 min-w-[9rem] font-semibold rounded-md shadow-sm border-2 border-gray-200 focus-visible:outline-none focus-visible:border-red-200"
             href="https://github.com/infamous55/github-user-cards"
             target="_blank"
           >
@@ -78,7 +78,7 @@ export default function Home() {
           <p>
             Made by{' '}
             <a
-              className="text-gray-200 font-semibold"
+              className="text-gray-200 font-semibold focus-visible:text-red-200 focus-visible:outline-none"
               href="https://infamous55.com"
               target="_blank"
             >
@@ -89,7 +89,7 @@ export default function Home() {
           <p>
             Powered by{' '}
             <a
-              className="text-gray-200 font-semibold"
+              className="text-gray-200 font-semibold focus-visible:text-red-200 focus-visible:outline-none"
               href="https://nextjs.org/"
               target="_blank"
             >
@@ -97,7 +97,7 @@ export default function Home() {
             </a>{' '}
             and{' '}
             <a
-              className="text-gray-200 font-semibold"
+              className="text-gray-200 font-semibold focus-visible:text-red-200 focus-visible:outline-none"
               href="https://supabase.com/"
               target="_blank"
             >
