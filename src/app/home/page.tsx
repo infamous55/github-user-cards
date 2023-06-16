@@ -1,10 +1,10 @@
 'use client';
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { redirect } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
-import NavBar from './NavBar';
+import { env } from '~/env.mjs';
+import toast from '~/lib/toast';
+import NavBar from '~/app/components/NavBar';
 
 import type { Database } from '~/lib/database.types';
 
@@ -13,17 +13,25 @@ export default function Home() {
   const router = useRouter();
 
   const handleCallToAction = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
+    let session;
+    try {
+      const { data } = await supabase.auth.getSession();
+      session = data.session;
+    } catch {
+      toast.error('Could not login!');
+    }
 
-    if (session) redirect('/dashboard');
+    if (session) router.push('/dashboard');
     else {
       try {
         const { error } = await supabase.auth.signInWithOAuth({
           provider: 'github',
           options: {
             scopes: 'repo',
+            queryParams: {
+              prompt: 'consent',
+            },
+            redirectTo: `${env.NEXT_PUBLIC_APP_URL}/auth/callback?redirect=dashboard`,
           },
         });
 
@@ -31,16 +39,7 @@ export default function Home() {
 
         router.refresh();
       } catch {
-        toast.error('Login failed!', {
-          position: 'bottom-right',
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
+        toast.error('Could not login!');
       }
     }
   };

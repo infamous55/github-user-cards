@@ -3,7 +3,7 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
+import toast from '~/lib/toast';
 import {
   ArrowRightIcon,
   ChevronDownIcon,
@@ -16,6 +16,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 import type { Database } from '~/lib/database.types';
 import type { Session } from '@supabase/auth-helpers-nextjs';
+import { env } from '~/env.mjs';
 
 export default function NavBar() {
   const supabase = createClientComponentClient<Database>();
@@ -44,36 +45,38 @@ export default function NavBar() {
         provider: 'github',
         options: {
           scopes: 'repo',
+          queryParams: {
+            prompt: 'consent',
+          },
+          redirectTo: `${env.NEXT_PUBLIC_APP_URL}/auth/callback?redirect=dashboard`,
         },
       });
+
+      if (error) throw error;
+    } catch {
+      toast.error('Could not login!');
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
 
       if (error) throw error;
 
       router.refresh();
     } catch {
-      toast.error('Login failed!', {
-        position: 'bottom-right',
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
+      toast.error('Could not logout!');
     }
-  };
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.refresh();
   };
 
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
   return (
     <nav className="mx-auto flex w-full max-w-7xl items-center justify-between p-6 lg:px-8">
-      <span className="font-bold text-xl">Logo</span>
+      <Link className="font-bold text-xl" href="/home">
+        Logo
+      </Link>
       {session ? (
         <DropdownMenu.Root>
           <DropdownMenu.Trigger
@@ -87,14 +90,14 @@ export default function NavBar() {
                   isFocused ? 'text-red-500' : 'text-gray-900'
                 }`}
               />
-              <Avatar.Root>
+              <Avatar.Root className="h-10 w-10">
                 <Avatar.Image
-                  className="h-10 w-10 rounded-full"
+                  className="h-full w-full rounded-full"
                   src={session.user.user_metadata!.avatar_url}
                   alt={session.user.user_metadata!.user_name}
                 />
                 <Avatar.Fallback
-                  className="h-10 w-10 rounded-full border-2 border-gray-200 flex items-center justify-center"
+                  className="h-full w-full rounded-full border-2 border-gray-200 flex items-center justify-center"
                   delayMs={600}
                 >
                   <span className="font-semibold">

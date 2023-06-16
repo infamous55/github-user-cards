@@ -5,6 +5,15 @@ const config = {
   experimental: {
     serverActions: true,
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/home',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default config;
