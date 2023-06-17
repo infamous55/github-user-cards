@@ -3,6 +3,7 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { env } from '~/env.mjs';
 import toast from '~/lib/toast';
 import {
   ArrowRightIcon,
@@ -16,7 +17,6 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 import type { Database } from '~/lib/database.types';
 import type { Session } from '@supabase/auth-helpers-nextjs';
-import { env } from '~/env.mjs';
 
 export default function NavBar() {
   const supabase = createClientComponentClient<Database>();

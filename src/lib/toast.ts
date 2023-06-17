@@ -1,16 +1,22 @@
-import { toast } from 'react-toastify';
+import { type ToastOptions, toast } from 'react-toastify';
+
+const options: ToastOptions = {
+  position: 'bottom-right',
+  autoClose: 1500,
+  hideProgressBar: true,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: 'light',
+};
 
 function error(message: string) {
-  toast.error(message, {
-    position: 'bottom-right',
-    autoClose: 3000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: 'light',
-  });
+  toast.error(message, options);
 }
 
-export default { error };
+function success(message: string) {
+  toast.success(message, options);
+}
+
+export default { error, success };

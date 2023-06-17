@@ -1,9 +1,9 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { env } from '~/env.mjs';
 
 import type { NextRequest } from 'next/server';
-import { env } from '~/env.mjs';
 import type { Database } from '~/lib/database.types';
 
 export async function GET(request: NextRequest) {

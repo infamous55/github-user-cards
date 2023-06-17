@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div>{children}</div>
-        <ToastContainer />
+        <ToastContainer limit={3} />
       </body>
     </html>
   );
