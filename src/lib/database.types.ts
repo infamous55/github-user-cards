@@ -9,6 +9,28 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      github_pat: {
+        Row: {
+          token: string;
+          user_id: string;
+        };
+        Insert: {
+          token?: string;
+          user_id: string;
+        };
+        Update: {
+          token?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'github_pat_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
       repo_stats: {
         Row: {
           enabled: boolean;
