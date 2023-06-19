@@ -8,10 +8,11 @@ import * as Switch from '@radix-ui/react-switch';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
-import type { Database } from '~/lib/database.types';
-
 type Props = {
-  options: Database['public']['Tables']['repo_stats']['Row'];
+  options: {
+    id: string;
+    enabled: boolean;
+  };
 };
 
 export default function RepoStats({ options }: Props) {
@@ -56,11 +57,11 @@ export default function RepoStats({ options }: Props) {
   const router = useRouter();
   const handleRegenerate = () => {
     mutation.mutate({ regenerate: true });
-    router.refresh();
+    router.refresh(); // TODO: move to querying on the client
   };
 
   return (
-    <div className="w-full lg:w-fit p-6 rounded-md shadow-sm border border-gray-200">
+    <div className="w-full p-6 rounded-md shadow-sm border border-gray-200">
       <div className="w-full flex justify-between">
         <h3 className="text-xl font-semibold mb-4">Repository Statistics</h3>
         <Switch.Root
@@ -77,12 +78,12 @@ export default function RepoStats({ options }: Props) {
           />
         </Switch.Root>
       </div>
-      <div className="flex mb-4">
-        <p className="p-2 rounded-sm border border-gray-200 w-fit text-gray-900 font-mono mr-4 focus-visible:border-red-500 focus-visible:outline-none bg-gray-100">
+      <div className="flex w-full mb-4">
+        <p className="p-2 rounded-sm border border-gray-200 w-fit text-gray-900 font-mono mr-4 focus-visible:border-red-500 focus-visible:outline-none bg-gray-100 flex-1">
           {url}
         </p>
         <button
-          className="py-1 px-2 rounded-sm border border-gray-200 text-gray-900 focus-visible:border-red-500 focus-visible:outline-none hover:bg-gray-100 disabled:cursor-not-allowed disabled:bg-gray-100"
+          className="py-1 px-2 rounded-sm border border-gray-200 text-gray-900 focus-visible:border-red-500 focus-visible:outline-none hover:bg-gray-100 disabled:cursor-not-allowed disabled:bg-gray-100 flex-shrink-0 flex-grow-0"
           onClick={handleCopy}
           disabled={!options.enabled}
         >
@@ -91,7 +92,7 @@ export default function RepoStats({ options }: Props) {
       </div>
       <button
         className="px-4 py-2 min-w-[9rem] font-semibold text-white rounded-md shadow-sm bg-red-600 hover:bg-red-500 focus-visible:outline-none focus-visible:bg-red-500 disabled:cursor-not-allowed disabled:bg-red-500"
-        disabled={mutation.isLoading}
+        disabled={mutation.isLoading || !enabled}
         onClick={handleRegenerate}
       >
         Regenerate Link
