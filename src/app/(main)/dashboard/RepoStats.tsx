@@ -56,7 +56,7 @@ export default function RepoStats({
 
   const handleToggle = async () => {
     await mutation.mutateAsync({ enabled: !enabled });
-    if (mutation.isSuccess) setEnabled(!enabled);
+    if (!mutation.isError) setEnabled(!enabled);
   };
 
   const { refetch } = useQuery({
