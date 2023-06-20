@@ -5,18 +5,21 @@ import { ClipboardIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import toast from '~/lib/toast';
 import * as Switch from '@radix-ui/react-switch';
-import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
-type Props = {
+import type { Database } from '~/lib/database.types';
+
+export default function RepoStats({
+  options,
+}: {
   options: {
     id: string;
     enabled: boolean;
   };
-};
-
-export default function RepoStats({ options }: Props) {
-  const url = `${env.NEXT_PUBLIC_APP_URL}/repo-stats/${options.id}`;
+}) {
+  const [url, setUrl] = useState(
+    `${env.NEXT_PUBLIC_APP_URL}/repo-stats/${options.id}`
+  );
   const handleCopy = () => {
     navigator.clipboard
       .writeText(url)
@@ -33,8 +36,10 @@ export default function RepoStats({ options }: Props) {
       enabled?: boolean;
       regenerate?: boolean;
     }) => {
-      // if (enabled == undefined && regenerate == undefined)
-      //   throw new Error('Invalid mutation arguments');
+      // Don't make the HTTP request if the mutation is called with too few arguments
+      // Should probably break this into separate endpoints for regeneration and updating
+      if (enabled == undefined && regenerate == undefined)
+        throw new Error('Invalid mutation arguments');
 
       return fetch(`${env.NEXT_PUBLIC_APP_URL}/repo-stats`, {
         method: 'PUT',
@@ -49,15 +54,28 @@ export default function RepoStats({ options }: Props) {
     },
   });
 
-  const handleToggle = () => {
-    mutation.mutate({ enabled: !enabled });
-    setEnabled(!enabled);
+  const handleToggle = async () => {
+    await mutation.mutateAsync({ enabled: !enabled });
+    if (mutation.isSuccess) setEnabled(!enabled);
   };
 
-  const router = useRouter();
-  const handleRegenerate = () => {
-    mutation.mutate({ regenerate: true });
-    router.refresh(); // TODO: move to querying on the client
+  const { refetch } = useQuery({
+    queryKey: ['repo-stats'],
+    queryFn: () => {
+      return fetch(`${env.NEXT_PUBLIC_APP_URL}/repo-stats`).then((response) =>
+        response.json()
+      );
+    },
+    enabled: false,
+    // onSuccess is getting deprecated, should move to useEffect
+    // The type of data is dependent of the API response
+    onSuccess: (data: Database['public']['Tables']['repo_stats']['Row']) => {
+      setUrl(`${env.NEXT_PUBLIC_APP_URL}/repo-stats/${data.id}`);
+    },
+  });
+  const handleRegenerate = async () => {
+    await mutation.mutateAsync({ regenerate: true });
+    refetch();
   };
 
   return (
