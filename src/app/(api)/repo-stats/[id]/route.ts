@@ -5,6 +5,9 @@ import { generateRepoStats } from '~/lib/cards';
 import { type NextRequest, NextResponse } from 'next/server';
 import type { Database } from '~/lib/database.types';
 
+// Supabase uses fetch calls under the hood
+export const fetchCache = 'default-no-store';
+
 export async function GET(
   _request: NextRequest,
   { params }: { params: { id: string } }

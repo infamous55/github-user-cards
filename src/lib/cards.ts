@@ -1,28 +1,53 @@
+import { Octokit } from '@octokit/core';
+
+// TODO: Figure out how to cache the numbers for short intervals
 export async function generateRepoStats(pat: string) {
-  return `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <style>
-    div {
-      color: white;
-      font: 18px serif;
-      height: 100%;
-      overflow: auto;
+  const octokit = new Octokit({ auth: pat });
+
+  let publicRepoCount = 0;
+  let privateRepoCount = 0;
+  let currentPage = 1;
+
+  do {
+    try {
+      const response = await octokit.request('GET /user/repos', {
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+        page: currentPage,
+      });
+
+      if (response.status != 200)
+        throw new Error('Invalid personal access token');
+
+      response.data.forEach((repo) => {
+        if (repo.private) privateRepoCount++;
+        else publicRepoCount++;
+      });
+      currentPage++;
+    } catch {
+      return 'Oops'; // Handle await failed
     }
-  </style>
+  } while (publicRepoCount + privateRepoCount == (currentPage - 1) * 30);
 
-  <polygon points="5,5 195,10 185,185 10,195" />
+  const totalRepoCount = publicRepoCount + privateRepoCount;
 
-  <!-- Common use case: embed HTML text into SVG -->
-  <foreignObject x="20" y="20" width="160" height="160">
-    <!--
-      In the context of SVG embedded in an HTML document, the XHTML
-      namespace could be omitted, but it is mandatory in the
-      context of an SVG document
-    -->
-    <div xmlns="http://www.w3.org/1999/xhtml">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mollis mollis
-      mi ut ultricies. Nullam magna ipsum, porta vel dui convallis, rutrum
-      imperdiet eros. Aliquam erat volutpat.
-    </div>
-  </foreignObject>
-</svg>`;
+  return `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <style>
+      div {
+        color: black;
+        font: 12px serif;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+    </style>
+    <foreignObject x="0" y="0" width="200" height="200">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+        <p>Public repositories: ${publicRepoCount}</p>
+        <p>Private repositories: ${privateRepoCount}</p>
+        <p>Total repositories: ${totalRepoCount}</p>
+      </div>
+    </foreignObject>
+  </svg>`;
 }
