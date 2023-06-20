@@ -1,12 +1,9 @@
 import './globals.css';
-import { Inter } from 'next/font/google';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 import { ToastContainer } from 'react-toastify';
 
 import Providers from './Providers';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   title: 'GitHub User Cards',
@@ -20,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <Providers>
           <div>{children}</div>
         </Providers>
