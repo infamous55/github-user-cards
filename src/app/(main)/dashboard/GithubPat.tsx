@@ -1,7 +1,7 @@
 'use client';
 
 import { EyeOpenIcon, EyeNoneIcon } from '@radix-ui/react-icons';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { ChangeEvent, useState } from 'react';
 import { env } from '~/env.mjs';
 import toast from '~/lib/toast';
@@ -11,6 +11,23 @@ export default function GithubPat({ pat: initialPat }: { pat: string }) {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPat(event.target.value);
   };
+
+  const check = useQuery({
+    queryKey: ['check-pat'],
+    staleTime: Infinity,
+    retry: false,
+    queryFn: async () => {
+      const response = await fetch('https://api.github.com/user/repos', {
+        headers: {
+          Accept: 'application/vnd.github+json',
+          Authorization: `Bearer ${pat}`,
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+      });
+      if (!response.ok) return Promise.reject();
+      else return response;
+    },
+  });
 
   const [hidden, setHidden] = useState(true);
   const handleToggle = () => {
@@ -33,6 +50,7 @@ export default function GithubPat({ pat: initialPat }: { pat: string }) {
   });
   const handleSubmit = () => {
     mutation.mutate();
+    check.refetch();
   };
 
   return (
@@ -62,6 +80,21 @@ export default function GithubPat({ pat: initialPat }: { pat: string }) {
           )}
         </button>
       </div>
+      <p
+        className={`${
+          check.isSuccess
+            ? 'text-green-500'
+            : check.isError
+            ? 'text-red-500'
+            : 'text-yellow-500'
+        } mb-4`}
+      >
+        {check.isSuccess
+          ? 'Your token is valid!'
+          : check.isError
+          ? 'Your token is incorrect!'
+          : 'Verifying your token...'}
+      </p>
       <button
         className="px-4 py-2 min-w-[9rem] font-semibold text-white rounded-md shadow-sm bg-red-600 hover:bg-red-500 focus-visible:outline-none focus-visible:bg-red-500 disabled:cursor-not-allowed disabled:bg-red-500"
         onClick={handleSubmit}
