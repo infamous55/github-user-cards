@@ -61,7 +61,7 @@ export default function RepoStats({
 
   const { refetch } = useQuery({
     queryKey: ['repo-stats'],
-    queryFn: () => {
+    queryFn: async () => {
       return fetch(`${env.NEXT_PUBLIC_APP_URL}/repo-stats`).then((response) =>
         response.json()
       );
@@ -97,13 +97,19 @@ export default function RepoStats({
         </Switch.Root>
       </div>
       <div className="flex w-full mb-4">
-        <p className="p-2 rounded-sm border border-gray-200 w-fit text-gray-900 font-mono mr-4 focus-visible:border-red-500 focus-visible:outline-none bg-gray-100 flex-1">
+        <input
+          type="text"
+          value={url}
+          className="p-2 rounded-sm border border-gray-200 w-full mr-4 text-gray-900 font-mono select-none bg-gray-100 text-ellipsis"
+          disabled={true}
+        />
+        {/* <p className="p-2 rounded-sm border border-gray-200 w-fit text-gray-900 font-mono mr-4 focus-visible:border-red-500 focus-visible:outline-none bg-gray-100 flex-1">
           {url}
-        </p>
+        </p> */}
         <button
           className="py-1 px-2 rounded-sm border border-gray-200 text-gray-900 focus-visible:border-red-500 focus-visible:outline-none hover:bg-gray-100 disabled:cursor-not-allowed disabled:bg-gray-100 flex-shrink-0 flex-grow-0"
           onClick={handleCopy}
-          disabled={!options.enabled}
+          disabled={!enabled}
         >
           <ClipboardIcon className="text-xl" />
         </button>
