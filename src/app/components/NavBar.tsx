@@ -44,7 +44,6 @@ export default function NavBar() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          scopes: 'repo',
           queryParams: {
             prompt: 'consent',
           },
