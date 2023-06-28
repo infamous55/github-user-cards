@@ -14,6 +14,7 @@ import {
 import Link from 'next/link';
 import * as Avatar from '@radix-ui/react-avatar';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import Image from 'next/image';
 
 import type { Database } from '~/lib/database.types';
 import type { Session } from '@supabase/auth-helpers-nextjs';
@@ -74,7 +75,7 @@ export default function NavBar() {
   return (
     <nav className="mx-auto flex w-full max-w-7xl items-center justify-between p-6 lg:px-8">
       <Link className="font-bold text-xl" href="/home">
-        Logo
+        <Image src="/logo.svg" height={30} width={30} alt="logo" />
       </Link>
       {session ? (
         <DropdownMenu.Root>
