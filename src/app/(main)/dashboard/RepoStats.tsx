@@ -68,7 +68,7 @@ export default function RepoStats({
     },
     enabled: false,
     // onSuccess is getting deprecated, should move to useEffect
-    // The type of data is dependent of the API response
+    // The type of data is dependent on the API response
     onSuccess: (data: Database['public']['Tables']['repo_stats']['Row']) => {
       setUrl(`${env.NEXT_PUBLIC_APP_URL}/repo-stats/${data.id}`);
     },
@@ -97,6 +97,7 @@ export default function RepoStats({
         </Switch.Root>
       </div>
       <div className="flex w-full mb-4">
+        {/* The URL field is easier to style when using an input rather than a paragraph */}
         <input
           type="text"
           value={url}
