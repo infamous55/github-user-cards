@@ -7,7 +7,8 @@ import Providers from './Providers';
 
 export const metadata = {
   title: 'GitHub User Cards',
-  description: 'Website description.',
+  description:
+    'Create minimalistic GitHub user cards with repository statistics as images for your readme.',
 };
 
 export default function RootLayout({
