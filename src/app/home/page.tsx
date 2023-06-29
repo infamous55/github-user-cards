@@ -57,9 +57,8 @@ export default function Home() {
         <div className="w-full h-full border border-gray-200 rounded-sm shadow-sm bg-white backdrop-blur-sm bg-opacity-40 p-6 flex flex-col items-center justify-center text-center">
           <h1 className="font-bold text-4xl mb-4">GitHub User Cards</h1>
           <p className="mb-4">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque sint
-            harum consequatur vel. Ipsum, unde voluptates sit aliquid, eum
-            dolorum quasi quae pariatur facilis.
+            Create minimalistic images with repository statistics for your
+            profile readme.
           </p>
           <div className="flex gap-x-4">
             <button

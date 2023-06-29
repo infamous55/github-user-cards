@@ -8,7 +8,7 @@ import Providers from './Providers';
 export const metadata = {
   title: 'GitHub User Cards',
   description:
-    'Create minimalistic GitHub user cards with repository statistics as images for your readme.',
+    'Create minimalistic images with repository statistics for your profile readme.',
 };
 
 export default function RootLayout({
@@ -18,6 +18,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+      </head>
       <body>
         <Providers>
           <div>{children}</div>
