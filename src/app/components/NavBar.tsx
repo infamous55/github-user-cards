@@ -75,7 +75,7 @@ export default function NavBar() {
   return (
     <nav className="mx-auto flex w-full max-w-7xl items-center justify-between p-6 lg:px-8">
       <Link className="font-bold text-xl" href="/home">
-        <Image src="/logo.svg" height={30} width={30} alt="logo" />
+        <Image src="/logo.png" height={30} width={30} alt="logo" />
       </Link>
       {session ? (
         <DropdownMenu.Root>

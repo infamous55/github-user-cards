@@ -12,10 +12,17 @@ export async function GET(request: NextRequest) {
   const redirectPath = requestUrl.searchParams.get('redirect');
   const redirect = `${env.NEXT_PUBLIC_APP_URL}/${redirectPath}`;
 
-  if (code) {
-    const supabase = createRouteHandlerClient<Database>({ cookies });
-    await supabase.auth.exchangeCodeForSession(code);
-  }
+  try {
+    if (code) {
+      const supabase = createRouteHandlerClient<Database>({ cookies });
+      await supabase.auth.exchangeCodeForSession(code);
+    }
 
-  return NextResponse.redirect(redirect ? redirect : requestUrl.origin);
+    return NextResponse.redirect(redirect ? redirect : requestUrl.origin);
+  } catch {
+    return NextResponse.json(
+      { error: 'Token Exchange Failed' },
+      { status: 500 }
+    );
+  }
 }

@@ -16,9 +16,12 @@ export default async function Dashboard() {
     .select('*')
     .eq('user_id', session!.user.id); // Session always exists in a protected route
 
+  if (!repoStatsRows || !repoStatsRows.length)
+    throw new Error("Couldn't fetch repo_stats record");
+
   const options = {
-    id: repoStatsRows![0].id as string, // There is always one repo_stats record for each user
-    enabled: repoStatsRows![0].enabled as boolean,
+    id: repoStatsRows[0].id as string,
+    enabled: repoStatsRows[0].enabled as boolean,
   };
 
   const { data: githubPatRows } = await supabase
@@ -26,7 +29,10 @@ export default async function Dashboard() {
     .select('*')
     .eq('user_id', session!.user.id);
 
-  const pat = githubPatRows![0].token as string; // There is always one github_pat record for each user
+  if (!githubPatRows || !githubPatRows.length)
+    throw new Error("Couldn't fetch github_pat record");
+
+  const pat = githubPatRows[0].token as string;
 
   return (
     <div>
