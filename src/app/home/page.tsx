@@ -27,7 +27,6 @@ export default function Home() {
         const { error } = await supabase.auth.signInWithOAuth({
           provider: 'github',
           options: {
-            scopes: 'repo',
             queryParams: {
               prompt: 'consent',
             },
