@@ -11,6 +11,8 @@ export const metadata = {
     'Create minimalistic images with repository statistics for your profile readme.',
 };
 
+import { Analytics } from '@vercel/analytics/react';
+
 export default function RootLayout({
   children,
 }: {
@@ -26,6 +28,7 @@ export default function RootLayout({
           <div>{children}</div>
         </Providers>
         <ToastContainer limit={3} />
+        <Analytics />
       </body>
     </html>
   );
