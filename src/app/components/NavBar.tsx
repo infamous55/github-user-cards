@@ -111,32 +111,30 @@ export default function NavBar() {
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
             <DropdownMenu.Content className="rounded-md mt-2 w-40 shadow-sm bg-white border-2 border-gray-200">
-              <DropdownMenu.Item className="hover:outline-none focus-visible:outline-none hover:bg-gray-100 focus-visible:bg-gray-100">
-                <Link
-                  href="/dashboard"
-                  className="w-full h-full flex items-center p-2"
-                >
-                  <StackIcon className="w-4 h-4 mr-2" />
-                  Dashboard
-                </Link>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item className="hover:outline-none focus-visible:outline-none hover:bg-gray-100 focus-visible:bg-gray-100">
-                <Link
-                  href="/settings"
-                  className="w-full h-full flex items-center p-2"
-                >
-                  <LockClosedIcon className="w-4 h-4 mr-2" />
-                  Settings
-                </Link>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item className="hover:outline-none focus-visible:outline-none hover:bg-gray-100 focus-visible:bg-gray-100">
-                <button
-                  onClick={handleSignOut}
-                  className="w-full h-full flex items-center p-2 text-start"
-                >
+              <Link href="/dashboard">
+                <DropdownMenu.Item className="hover:outline-none focus-visible:outline-none hover:bg-gray-100 focus-visible:bg-gray-100">
+                  <div className="w-full h-full flex items-center p-2">
+                    <StackIcon className="w-4 h-4 mr-2" />
+                    Dashboard
+                  </div>
+                </DropdownMenu.Item>
+              </Link>
+              <Link href="/settings">
+                <DropdownMenu.Item className="hover:outline-none focus-visible:outline-none hover:bg-gray-100 focus-visible:bg-gray-100">
+                  <div className="w-full h-full flex items-center p-2">
+                    <LockClosedIcon className="w-4 h-4 mr-2" />
+                    Settings
+                  </div>
+                </DropdownMenu.Item>
+              </Link>
+              <DropdownMenu.Item
+                className="hover:outline-none focus-visible:outline-none hover:bg-gray-100 focus-visible:bg-gray-100"
+                onClick={handleSignOut}
+              >
+                <div className="w-full h-full flex items-center p-2 text-start">
                   <ArrowRightIcon className="w-4 h-4 mr-2" />
                   Sign out
-                </button>
+                </div>
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Portal>
