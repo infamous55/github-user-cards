@@ -1,6 +1,5 @@
 import { Octokit } from '@octokit/core';
 
-// TODO: Figure out how to cache the numbers or the image for short intervals
 export async function generateRepoStats(pat: string) {
   const octokit = new Octokit({ auth: pat });
 

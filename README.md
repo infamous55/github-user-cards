@@ -23,13 +23,15 @@
 
 Authentication is performed using GitHub OAuth 2.0. Users are required to provide a [fine-grained personal access token](https://github.blog/2022-10-18-introducing-fine-grained-personal-access-tokens-for-github/), which will be utilized to send requests to the GitHub API and count repositories. The image badges' links can be regenerated, and they can also be enabled or disabled.
 
-Check out [my profile](https://github.com/infamous55) to see how the images look like.
+This is how the SVGs look like:
+
+![Example](http://github-user-cards.infamous55.com/repo-stats/ec3b6e3e-3dd1-4557-b098-0bd1f70eb1e0)
 
 The project was built using [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/), and [Supabase](https://supabase.com/).
 
 ## To Do
 
-- [ ] Add support for caching
+- [x] ~~Add support for caching (up to 24 hours)~~
 - [ ] Add a language count image badge
 
 ## Contributing
