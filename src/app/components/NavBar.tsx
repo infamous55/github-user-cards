@@ -132,7 +132,7 @@ export default function NavBar() {
                 className="hover:outline-none focus-visible:outline-none hover:bg-gray-100 focus-visible:bg-gray-100"
                 onClick={handleSignOut}
               >
-                <div className="w-full h-full flex items-center p-2 text-start">
+                <div className="w-full h-full flex items-center p-2 text-start hover:cursor-pointer">
                   <ArrowRightIcon className="w-4 h-4 mr-2" />
                   Sign out
                 </div>
