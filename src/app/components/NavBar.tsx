@@ -10,6 +10,7 @@ import {
   ChevronDownIcon,
   LockClosedIcon,
   StackIcon,
+  GitHubLogoIcon,
 } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import * as Avatar from '@radix-ui/react-avatar';
@@ -141,9 +142,10 @@ export default function NavBar() {
         </DropdownMenu.Root>
       ) : (
         <button
-          className="px-4 py-2 font-semibold text-white rounded-md shadow-sm bg-red-600 hover:bg-red-500 focus-visible:outline focus-visible:outline-none focus-visible:bg-red-500"
+          className="flex items-center gap-2 px-4 py-2 font-semibold text-white rounded-md shadow-sm bg-red-600 hover:bg-red-500 focus-visible:outline focus-visible:outline-none focus-visible:bg-red-500"
           onClick={handleSignIn}
         >
+          <GitHubLogoIcon className="w-4 h-4" />
           Sign in
         </button>
       )}
