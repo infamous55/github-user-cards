@@ -4,6 +4,8 @@ import { cookies } from 'next/headers';
 import { type NextRequest, NextResponse } from 'next/server';
 import { env } from '~/env.mjs';
 
+export const fetchCache = 'force-no-store';
+
 export async function DELETE(_request: NextRequest) {
   try {
     const helper = createRouteHandlerClient({ cookies });
@@ -13,8 +15,6 @@ export async function DELETE(_request: NextRequest) {
     } = await helper.auth.getSession();
     if (!session)
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    await helper.auth.signOut();
 
     const supabase = createClient(
       env.NEXT_PUBLIC_SUPABASE_URL,

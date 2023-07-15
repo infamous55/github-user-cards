@@ -1,12 +1,15 @@
 'use client';
 
 import { LockClosedIcon } from '@radix-ui/react-icons';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { env } from '~/env.mjs';
 import toast from '~/lib/toast';
 
-export default async function Settings() {
+export default function Settings() {
+  const supabase = createClientComponentClient();
+
   const router = useRouter();
 
   const mutation = useMutation({
@@ -17,8 +20,9 @@ export default async function Settings() {
       if (!response.ok) return Promise.reject();
       else return response;
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success('Deleted Successfully');
+      await supabase.auth.signOut();
       router.push('/home');
     },
     onError: () => {
@@ -46,6 +50,7 @@ export default async function Settings() {
         <button
           className="px-4 py-2 min-w-[9rem] font-semibold text-white rounded-md shadow-sm bg-red-600 hover:bg-red-500 focus-visible:outline-none focus-visible:bg-red-500 disabled:cursor-not-allowed disabled:bg-red-500"
           onClick={handleDelete}
+          disabled={mutation.isLoading}
         >
           Delete Account
         </button>
