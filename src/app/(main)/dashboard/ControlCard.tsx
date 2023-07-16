@@ -11,14 +11,16 @@ import type { Database } from '~/lib/database.types';
 
 export default function RepoStats({
   options,
+  type,
 }: {
   options: {
     id: string;
     enabled: boolean;
   };
+  type: 'repo-stats' | 'top-langs';
 }) {
   const [url, setUrl] = useState(
-    `${env.NEXT_PUBLIC_APP_URL}/repo-stats/${options.id}`
+    `${env.NEXT_PUBLIC_APP_URL}/${type}/${options.id}`
   );
   const handleCopy = () => {
     navigator.clipboard
@@ -28,66 +30,68 @@ export default function RepoStats({
   };
 
   const [enabled, setEnabled] = useState(options.enabled);
-  const mutation = useMutation({
-    mutationFn: ({
-      enabled,
-      regenerate,
-    }: {
-      enabled?: boolean;
-      regenerate?: boolean;
-    }) => {
-      // Don't make the HTTP request if the mutation is called with too few arguments
-      // Should probably break this into separate endpoints for regeneration and updating
-      if (enabled == undefined && regenerate == undefined)
-        throw new Error('Invalid mutation arguments');
-
-      return fetch(`${env.NEXT_PUBLIC_APP_URL}/repo-stats`, {
+  const toggleMutation = useMutation({
+    mutationFn: () => {
+      return fetch(`${env.NEXT_PUBLIC_APP_URL}/${type}`, {
         method: 'PUT',
-        body: JSON.stringify({ enabled, regenerate }),
+        body: JSON.stringify({ enabled: !enabled }),
       });
     },
-    onError: () => {
-      toast.error('Something went wrong!');
-    },
-    onSuccess: () => {
-      toast.success('Updated successfully!');
-    },
   });
-
   const handleToggle = async () => {
-    await mutation.mutateAsync({ enabled: !enabled });
-    if (!mutation.isError) setEnabled(!enabled);
+    await toggleMutation.mutateAsync();
+    if (!toggleMutation.isError) {
+      setEnabled(!enabled);
+      toast.success('Updated successfully!');
+    } else toast.error('Something went wrong!');
   };
 
   const { refetch } = useQuery({
-    queryKey: ['repo-stats'],
+    queryKey: [type],
     queryFn: async () => {
-      return fetch(`${env.NEXT_PUBLIC_APP_URL}/repo-stats`).then((response) =>
+      return fetch(`${env.NEXT_PUBLIC_APP_URL}/${type}`).then((response) =>
         response.json()
       );
     },
     enabled: false,
     // onSuccess is getting deprecated, should move to useEffect
     // The type of data is dependent on the API response
-    onSuccess: (data: Database['public']['Tables']['repo_stats']['Row']) => {
-      setUrl(`${env.NEXT_PUBLIC_APP_URL}/repo-stats/${data.id}`);
+    onSuccess: (
+      data:
+        | Database['public']['Tables']['repo_stats']['Row']
+        | Database['public']['Tables']['top_langs']['Row']
+    ) => {
+      setUrl(`${env.NEXT_PUBLIC_APP_URL}/${type}/${data.id}`);
+    },
+  });
+
+  const regenerateMutation = useMutation({
+    mutationFn: () => {
+      return fetch(`${env.NEXT_PUBLIC_APP_URL}/${type}/regenerate`, {
+        method: 'POST',
+      });
     },
   });
   const handleRegenerate = async () => {
-    await mutation.mutateAsync({ regenerate: true });
-    refetch();
+    await regenerateMutation.mutateAsync();
+    if (!regenerateMutation.isError) {
+      toast.success('Updated successfully!');
+      refetch();
+    } else toast.error('Something went wrong!');
   };
 
   return (
     <div className="w-full p-6 rounded-md shadow-sm border border-gray-200">
       <div className="w-full flex justify-between">
-        <h3 className="text-xl font-semibold mb-4">Repository Statistics</h3>
+        <h3 className="text-xl font-semibold mb-4">
+          {type === 'repo-stats' ? 'Repository Statistics' : 'Top Languages'}
+        </h3>
         <Switch.Root
           className={`relative inline-flex items-center h-5 w-12 flex-shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out focus:border-red-500 focus:outline-none disabled:cursor-not-allowed ${
             enabled ? 'bg-red-500' : 'bg-gray-200'
           }`}
           onCheckedChange={handleToggle}
-          disabled={mutation.isLoading}
+          disabled={toggleMutation.isLoading}
         >
           <Switch.Thumb
             className={`pointer-events-none inline-block h-4 w-4 transform rounded-full shadow ring-0 transition duration-200 ease-in-out bg-white ${
@@ -117,7 +121,7 @@ export default function RepoStats({
       </div>
       <button
         className="px-4 py-2 min-w-[9rem] font-semibold text-white rounded-md shadow-sm bg-red-600 hover:bg-red-500 focus-visible:outline-none focus-visible:bg-red-500 disabled:cursor-not-allowed disabled:bg-red-500"
-        disabled={mutation.isLoading || !enabled}
+        disabled={regenerateMutation.isLoading || !enabled}
         onClick={handleRegenerate}
       >
         Regenerate Link

@@ -2,7 +2,7 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { StackIcon } from '@radix-ui/react-icons';
 import GithubPat from './GithubPat';
-import RepoStats from './RepoStats';
+import ControlCard from './ControlCard';
 
 export default async function Dashboard() {
   const supabase = createServerComponentClient({ cookies });
@@ -19,9 +19,22 @@ export default async function Dashboard() {
   if (!repoStatsRows || !repoStatsRows.length)
     throw new Error("Couldn't fetch repo_stats record");
 
-  const options = {
+  const repoOptions = {
     id: repoStatsRows[0].id as string,
     enabled: repoStatsRows[0].enabled as boolean,
+  };
+
+  const { data: topLangsRows } = await supabase
+    .from('top_langs')
+    .select('*')
+    .eq('user_id', session!.user.id);
+
+  if (!topLangsRows || !topLangsRows.length)
+    throw new Error("Couldn't fetch top_langs record");
+
+  const langsOptions = {
+    id: topLangsRows[0].id as string,
+    enabled: topLangsRows[0].enabled as boolean,
   };
 
   const { data: githubPatRows } = await supabase
@@ -42,7 +55,9 @@ export default async function Dashboard() {
       </h1>
       <GithubPat pat={pat} />
       <div className="h-4"></div>
-      <RepoStats options={options} />
+      <ControlCard options={repoOptions} type="repo-stats" />
+      <div className="h-4"></div>
+      <ControlCard options={langsOptions} type="top-langs" />
     </div>
   );
 }

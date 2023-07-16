@@ -15,7 +15,7 @@ export async function GET(_request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { data } = await supabase
-      .from('repo_stats')
+      .from('top_langs')
       .select()
       .eq('user_id', session.user.id);
     if (!data || !data.length)
@@ -52,7 +52,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Bad Request' }, { status: 400 });
 
     const { error } = await supabase
-      .from('repo_stats')
+      .from('top_langs')
       .update({ enabled: result.data.enabled })
       .eq('user_id', session.user.id);
     if (error)
