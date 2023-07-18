@@ -26,6 +26,16 @@ const config = {
           },
         ],
       },
+      {
+        source: '/top-langs/:id',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value:
+              'public, max-age=43200, s-maxage=86400, stale-while-revalidate=86400',
+          },
+        ],
+      },
     ];
   },
 };
