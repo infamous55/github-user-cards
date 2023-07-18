@@ -25,14 +25,16 @@ Authentication is performed using GitHub OAuth 2.0. Users are required to provid
 
 This is how the SVGs look like:
 
-![Example](https://github-user-cards.infamous55.com/repo-stats/5894ae33-7c55-4bcf-8df5-5bf24d7261c8)
+![Example Repository Statistics](https://github-user-cards.infamous55.com/repo-stats/5894ae33-7c55-4bcf-8df5-5bf24d7261c8)
+
+![Example Top Languages](https://github-user-cards.infamous55.com/top-langs/b8484563-5acd-490d-b7d9-2fc9257f1370)
 
 The project was built using [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/), and [Supabase](https://supabase.com/).
 
 ## To Do
 
 - [x] ~~Add support for caching (up to 24 hours)~~
-- [ ] Add a language count image badge
+- [x] ~~Add a language count image badge~~
 
 ## Contributing
 
