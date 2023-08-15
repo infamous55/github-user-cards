@@ -25,9 +25,9 @@ Authentication is performed using GitHub OAuth 2.0. Users are required to provid
 
 This is how the SVGs look like:
 
-![Example Repository Statistics](https://github-user-cards.infamous55.com/repo-stats/5894ae33-7c55-4bcf-8df5-5bf24d7261c8)
+![Example User Statistics](./examples/user-statistics.svg)
 
-![Example Top Languages](https://github-user-cards.infamous55.com/top-langs/b8484563-5acd-490d-b7d9-2fc9257f1370)
+![Example Top Languages](./examples/top-languages.svg)
 
 The project was built using [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/), and [Supabase](https://supabase.com/).
 
