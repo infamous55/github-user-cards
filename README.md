@@ -1,6 +1,6 @@
 <h1 align="center">
   <br />
-  <a href="https://github-user-cards.infamous55.com/" target="_blank">
+  <a href="#" target="_blank">
     <img src="https://raw.githubusercontent.com/infamous55/github-user-cards/master/public/logo.png" width="80" height="80" alt="Logo" />
   </a>
   <br />
